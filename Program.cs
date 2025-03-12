@@ -36,7 +36,16 @@ namespace CheapestPart
             //step 4 find alternative partnumbers for that part and repeat step 3
             //4.1 check for repeat partnumbers to make sure we dont infinitely loop parts around
             //step 5 return link to cheapest found part.
-            SearchPart("02A141165M");
+
+            //SearchPart("02A141165M");
+            //SearchPart("0281002757");
+            //SearchPart("021905106C");
+            //SearchFCPEuro("02A141165M");
+            
+            PriceScraper priceScraper = new PriceScraper();
+            //priceScraper.SearchPartNumber("02A141165M");
+            priceScraper.SearchPartUroTuning("02A141165M");
+
 
 
 
@@ -45,19 +54,44 @@ namespace CheapestPart
 
         public static List<PriceLink> SearchPart(string partnumber)
         {
+            Console.WriteLine("\nSearching for " + partnumber + "\n");
             PriceScraper scraper = new PriceScraper();
-            var links = scraper.SearchPart(partnumber);
-            Console.WriteLine(links);
+            var links = scraper.SearchPartECS(partnumber);
+            
             var PriceList = new List<PriceLink>();
             foreach (var link in links)
             {
-                PriceList.Add(scraper.ScrapePrice(link));
+                PriceList.Add(scraper.ScrapePriceECS(link));
             }
             foreach (var price in PriceList)
             {
                 Console.WriteLine(price);
             }
+            Console.WriteLine("\n");
             return PriceList;
+        }
+
+        public static List<PriceLink> SearchFCPEuro(string partnumber)
+        {
+            var PriceList = new List<PriceLink>();
+            Console.WriteLine("\nSearching for " + partnumber + "\n");
+            PriceScraper scraper = new PriceScraper();
+            var links = scraper.SearchPartFCPEuro(partnumber);
+            Console.WriteLine("Done");
+            foreach(var link in links)
+            {
+                if (link != null)
+                {
+                    PriceList.Add(scraper.ScrapePriceFCPEuro(link));
+                }
+            }
+            foreach(var price in PriceList)
+            {
+                Console.WriteLine(price);
+            }
+            Console.WriteLine("\n");
+            return PriceList;
+
         }
 
 
