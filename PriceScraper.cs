@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Threading;
+﻿//using System;
+//using System.Collections.Concurrent;
+//using System.Collections.Generic;
+//using System.ComponentModel;
+//using System.Globalization;
+//using System.IO;
+//using System.Linq;
+//using System.Reflection;
+//using System.Reflection.Metadata.Ecma335;
+//using System.Runtime.CompilerServices;
+//using System.Threading;
 using HtmlAgilityPack;
-using MySql.Data;
-using MySql.Data.MySqlClient;
-using static System.Net.WebRequestMethods;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+//using MySql.Data;
+//using MySql.Data.MySqlClient;
+//using static System.Net.WebRequestMethods;
 
 
 // https://www.urotuning.com/pages/search-results?q=02A141165M
@@ -31,6 +34,8 @@ namespace CheapestPart
             PriceScraper scraper = new PriceScraper();
             var ECSlinks = scraper.SearchPartECS(partnum);
             var FCPlinks = scraper.SearchPartFCPEuro(partnum);
+            //var UroLinks = scraper.SearchPartUroTuning(partnum);
+            
             var priceList = new List<PriceLink>();
 
             foreach (var link in ECSlinks)
@@ -40,7 +45,12 @@ namespace CheapestPart
             foreach(var link in FCPlinks)
             {
                 priceList.Add(scraper.ScrapePriceFCPEuro(link));
-            }  
+            }
+
+            //foreach (var link in UroLinks)
+            //{
+                //priceList.Add(ScrapePriceUroTuning(link));  //implement
+            //}
             priceList = priceList.OrderBy(price => price.GetPrice()).ToList();
             foreach (var price in priceList)
             {
@@ -162,35 +172,45 @@ namespace CheapestPart
 
         }
 
+        
+
         public List<string> SearchPartUroTuning(string partnum)
         {
-            string link = "https://www.urotuning.com/pages/search-results?q=" + partnum;
-            var document = Web.Load(link);
-            //var anchorNodes = document.DocumentNode.SelectNodes("//a[contains(@class, 'findify-components--cards--product') and contains(@class, 'findify-search-card')]");
-            var anchorNodes = document.DocumentNode.QuerySelectorAll("a.findify-search-card");
-            //it does not seem to be null, but we still cannot get any of the data from it, what a shame. 
-            if (anchorNodes == null)
-            {
-                Console.WriteLine("Uro PART NULL");
-                //return null;
-            }
+            IWebDriver driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://www.urotuning.com/pages/search-results?q=" + partnum);
+            System.Threading.Thread.Sleep(3000);
+            IReadOnlyCollection<IWebElement> productLinks = driver.FindElements(By.CssSelector("a.findify-components--cards--product"));
+            
             List<string> results = new List<string>();
-            int i = 1;
-            foreach (var anchorNode in anchorNodes)
-            {
-                Console.WriteLine("Iteration : " + i);
-                var href = anchorNode.GetAttributeValue("href", string.Empty);
-                if (href != string.Empty)
-                {
-                    results.Add("https://www.fcpeuro.com" + href);
-                }
-                Console.WriteLine("LINK : "+ href);
-                i++;
+            if (productLinks == null){
+                Console.WriteLine("URO PART NULL");
+                return new List<string>();
             }
-            Console.WriteLine("here is the TO String for the anchornodes:::");
-            Console.WriteLine(anchorNodes.ToString());
+            foreach (var link in productLinks)
+            {
+                results.Add(link.GetAttribute("href"));
+                Console.WriteLine(link.GetAttribute("href"));
+            }
+
             return results;
 
+        }
+
+        public PriceLink ScrapePriceUro(string link)
+        {
+            if (link == null) { Console.WriteLine("NULL LINK"); return null; }
+            PriceLink priceLink;
+            IWebDriver driver = new ChromeDriver();
+            driver.Navigate().GoToUrl(link);
+            System.Threading.Thread.Sleep(3000);
+            IReadOnlyCollection<IWebElement> priceNodes = driver.FindElements(By.CssSelector("span.bold_option_price_display"));
+            //<span class="bold_option_price_display price on-sale">$12.59</span>
+            foreach (var priceNode in priceNodes)
+            {
+                //return priceNode.GetAttribute(""); //need to get the inner HTML from this line -----------------------------------------------------------
+            }
+            priceLink = new PriceLink("",0.0);
+            return priceLink;
         }
 
 

@@ -43,10 +43,10 @@ namespace CheapestPart
             //SearchFCPEuro("02A141165M");
             
             PriceScraper priceScraper = new PriceScraper();
-            //priceScraper.SearchPartNumber("02A141165M");
-            priceScraper.SearchPartUroTuning("02A141165M");
-
-
+            priceScraper.SearchPartNumber("021905106C");
+            //priceScraper.SearchPartUroTuning("02A141165M");
+            //priceScraper.ScrapePriceUro("https://www.urotuning.com/products/clutch-release-bearing-02a-02j-5spd-1-02a141165m-ina");
+            
 
 
 
