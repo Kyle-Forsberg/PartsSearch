@@ -21,7 +21,7 @@ namespace CheapestPart
         public static void Main(string[]args)
         {
             //string partNumber = args[0];
-
+			
             Console.WriteLine("CHEAPEST PARTS: ");
             //step 1: create the parts class                                            DONE
             //1.1 create part number, part name, and pricelists for various sellers     Progress
@@ -41,9 +41,10 @@ namespace CheapestPart
             //SearchPart("0281002757");
             //SearchPart("021905106C");
             //SearchFCPEuro("02A141165M");
-            
+            Console.WriteLine("Enter in the partnumber: ");
+	    var partNumber = Console.ReadLine();
             PriceScraper priceScraper = new PriceScraper();
-            priceScraper.SearchPartNumber("021905106C");
+            priceScraper.SearchPartNumber(partNumber);
             //priceScraper.SearchPartUroTuning("02A141165M");
             //priceScraper.ScrapePriceUro("https://www.urotuning.com/products/clutch-release-bearing-02a-02j-5spd-1-02a141165m-ina");
             
