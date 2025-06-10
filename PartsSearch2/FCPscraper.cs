@@ -58,6 +58,7 @@ public class FCPscraper
         //organizes them into the listing class
         //and returns a list of those listings
 
+        
         //null list check
         if (Links.Count == 0) { Console.WriteLine("Null link, check that error to ensure Find Price is not called with a null link"); }
 
