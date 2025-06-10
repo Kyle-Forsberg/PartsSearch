@@ -6,6 +6,15 @@ namespace PartsSearch2;
 
 public class FCPscraper
 {
+
+    public List<Listing>? FCPsearch(string partNumber)
+    {
+        var links = this.SearchResultsFCP(partNumber);
+        var results = this.FindPricesFCP(links, partNumber);
+        return results;
+
+    }
+    
     public List<string>? SearchResultsFCP(string partNumber)
     {
         //makes the search in the site, and then returns links to each listing
@@ -27,7 +36,7 @@ public class FCPscraper
             string? href = node.GetAttributeValue("data-href", string.Empty);
             if (href != string.Empty)
             {
-                results.Add(href);
+                results.Add("https://www.fcpeuro.com" + href);
             }
         }
 
@@ -43,7 +52,7 @@ public class FCPscraper
     
 
 
-    public List<Listing>? FindPricesFCP(List<string> Links)
+    public List<Listing>? FindPricesFCP(List<string> Links, string partnumber)
     {
         //this takes each of the links, finds the prices and other bits of it
         //organizes them into the listing class
@@ -55,11 +64,31 @@ public class FCPscraper
         var web = new HtmlWeb();
         List<Listing> results = new List<Listing>();
         //load page and init list;
-
-
+        HtmlDocument doc;
+        HtmlNode? div;
+        HtmlNode? span;        
         foreach (string link in Links)
         {
-            //main looping around FCP euro
+            doc = web.Load(link);
+            div = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'listing__amount')]");
+            span = div?.SelectSingleNode(".//span");
+            if (span != null)
+            {
+                double price = double.Parse(span.InnerHtml.Substring(1));   //think this removes the currency, from old ver
+                var brandDiv = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'listing__brand')]");
+                var brandSpan = brandDiv?.SelectSingleNode(".//span");
+
+                string brandname = string.Empty;
+                if (brandSpan == null)
+                {
+                    brandname = "Unknown Brand";
+                }
+                else
+                {
+                    brandname = brandSpan.InnerHtml.Substring(1).Trim('\n', '\t'); }
+                
+                results.Add(new Listing(partnumber, link, brandname, price));
+            }
 
         }
         return results;

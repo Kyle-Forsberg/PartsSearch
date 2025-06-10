@@ -5,6 +5,13 @@ namespace PartsSearch2;
 
 public class ECSscraper
 {
+    public List<Listing>? ECSsearch(string partNumber)
+    {
+        var links = SearchResultsECS(partNumber);
+        return FindPricesECS(links);
+    }
+    
+    
     public List<string>? SearchResultsECS(string partNumber)
     {
         //makes the search in the site, and then returns links to each listing
