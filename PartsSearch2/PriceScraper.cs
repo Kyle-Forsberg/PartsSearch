@@ -27,11 +27,11 @@ public class PriceScraper
  
         public List<string>? SearchResultsECS(string partNumber)        //currenty string. change to Listing class later
         {
-                return ecs.SearchResultsECS(partNumber);
+                return null;
         }
         //need to ensure that each of these can be null, since some will be inevitably
         public List<Listing>? FindPricesECS(List<string> Links)
         {
-                return ecs.FindPricesECS(Links);
+                return null;
         }
 }

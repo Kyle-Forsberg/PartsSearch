@@ -5,20 +5,35 @@ namespace PartsSearch2;
 
 public class ECSscraper
 {
-    public List<Listing>? ECSsearch(string partNumber)
+    private static readonly HttpClient client = new HttpClient();
+
+    public async Task<string> GetHtml(string url)
     {
-        var links = SearchResultsECS(partNumber);
-        return FindPricesECS(links);
+        var req = new HttpRequestMessage(HttpMethod.Get, url);
+        req.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+        "AppleWebKit/537.36 (KHTML, like Gecko) " +
+            "Chrome/114.0.0.0 Safari/537.36");
+        var resp = await client.SendAsync(req);
+        resp.EnsureSuccessStatusCode();
+        return await resp.Content.ReadAsStringAsync();
+    }
+    
+    public async Task<List<Listing>?> ECSsearch(string partNumber)
+    {
+        var links = await SearchResultsECS(partNumber);
+        var results = await FindPricesECS(links);
+        return results;
     }
     
     
-    public List<string>? SearchResultsECS(string partNumber)
+    public async Task<List<string>?> SearchResultsECS(string partNumber)
     {
         //makes the search in the site, and then returns links to each listing
         //hence it returning a list
         string link = "https://www.ecstuning.com/Search/SiteSearch/" + partNumber;
-        HtmlWeb web = new HtmlWeb();
-        var doc = web.Load(link);
+        string html = await GetHtml(link);
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//a[@class='listingThumbWrap']");
         if (nodes == null)
         {
@@ -37,19 +52,21 @@ public class ECSscraper
         //successful search, return LINKS to every product page of a match
     }
 
-    public List<Listing>? FindPricesECS(List<string> Links)
+    public async Task<List<Listing>?> FindPricesECS(List<string> Links)
     {
         //this takes each of the links, finds the prices and other bits of it
         //organizes them into the listing class
         //and returns a list of those listings
         if(Links.Count==0){Console.WriteLine("Null link, check that error to ensure Find Price is not called with a null link");}
-        var web = new HtmlWeb();
+        
         List<Listing> results = new List<Listing>();
         foreach(string link in Links)
         {
+            var html = await GetHtml(link);
             //Console.WriteLine($"ITERATION FOR {link}");
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
             Listing listing;
-            var doc = web.Load(link);
             var productNode = doc.DocumentNode.SelectSingleNode("//span[@id='price']");
             var available = doc.DocumentNode.SelectSingleNode("//div[@class='product_isnotavailable']");
             if (available != null)
