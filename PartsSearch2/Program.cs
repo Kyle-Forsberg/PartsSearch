@@ -47,8 +47,25 @@ class Program
         var ecsResults = await ecsTask;
 
         List<Listing> results = new List<Listing>();
-        results.AddRange(fcpResults);
-        results.AddRange(ecsResults);
+        foreach (Listing listing in fcpResults)
+        {
+            if (listing == null)
+            {
+                continue;
+            }
+
+            results.Add(listing);
+        }
+
+        foreach (Listing listing in ecsResults)
+        {
+            if (listing == null)
+            {
+                continue;
+            }
+            results.Add(listing);
+        }
+        
         
         results.Sort((a , b) => a.Price.CompareTo(b.Price));
         //above line sorts by price with this sick ass lambda 

@@ -28,9 +28,14 @@ public class ECSscraper
         {
             tasks.Add(FindPricesECS(link));
         }
-        var results =  await Task.WhenAll(tasks);s
-        return results.ToList();
-        
+        var results =  await Task.WhenAll(tasks);
+        List<Listing?> resultsList = results.ToList();
+        foreach (var result in results)
+        {
+            if(result == null) continue;
+            else{resultsList.Add(result);}
+        }
+        return resultsList;
     }
     
     

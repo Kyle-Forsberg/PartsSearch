@@ -36,7 +36,13 @@ public class FCPscraper
             tasks.Add(FindPricesFCP(link, partNumber));
         }
         Listing[] listings = await Task.WhenAll(tasks);
-        results = listings.ToList();
+        foreach (var listing in listings)
+        {
+            if(listing == null){continue;}
+            if(listing.Price == null){continue;}
+            results.Add(listing);
+            
+        }
         return results;
         //this.finalResults = results;
 
