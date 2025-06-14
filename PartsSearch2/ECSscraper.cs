@@ -1,3 +1,4 @@
+using System.Net.WebSockets;
 using HtmlAgilityPack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -21,8 +22,15 @@ public class ECSscraper
     public async Task<List<Listing>?> ECSsearch(string partNumber)
     {
         var links = await SearchResultsECS(partNumber);
-        var results = await FindPricesECS(links);
-        return results;
+        if(links == null) return null;
+        List<Task<Listing?>> tasks = new List<Task<Listing?>>();
+        foreach (var link in links)
+        {
+            tasks.Add(FindPricesECS(link));
+        }
+        var results =  await Task.WhenAll(tasks);s
+        return results.ToList();
+        
     }
     
     
@@ -52,51 +60,48 @@ public class ECSscraper
         //successful search, return LINKS to every product page of a match
     }
 
-    public async Task<List<Listing>?> FindPricesECS(List<string> Links)
+    public async Task<Listing?> FindPricesECS(string link)
     {
         //this takes each of the links, finds the prices and other bits of it
         //organizes them into the listing class
         //and returns a list of those listings
-        if(Links.Count==0){Console.WriteLine("Null link, check that error to ensure Find Price is not called with a null link");}
+        if(link.Length==0){Console.WriteLine("Null link, check that error to ensure Find Price is not called with a null link");}
         
-        List<Listing> results = new List<Listing>();
-        foreach(string link in Links)
+ 
+        var html = await GetHtml(link);
+        //Console.WriteLine($"ITERATION FOR {link}");
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        Listing listing;
+        var productNode = doc.DocumentNode.SelectSingleNode("//span[@id='price']");
+        var available = doc.DocumentNode.SelectSingleNode("//div[@class='product_isnotavailable']");
+        if (available != null)
         {
-            var html = await GetHtml(link);
-            //Console.WriteLine($"ITERATION FOR {link}");
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            Listing listing;
-            var productNode = doc.DocumentNode.SelectSingleNode("//span[@id='price']");
-            var available = doc.DocumentNode.SelectSingleNode("//div[@class='product_isnotavailable']");
-            if (available != null)
-            {
-                //Console.WriteLine("No longer available product found on ECS");
-                continue;
-            }
-            double price = double.Parse(productNode.InnerHtml);
-            string? brand = doc.DocumentNode.SelectSingleNode("//a[@id='brandLink']")?.GetAttributeValue("title",string.Empty);
-
-            string? partnumber = doc.DocumentNode.SelectSingleNode("//dd[@class='mfg-part-definition']//span").InnerHtml;
-            //selects the partnumber hopefully fromt that mfgpartdef dd
-            if(partnumber !=null && brand!=null)
-            {
-                //Console.WriteLine($"Retrieved partnumber {partnumber} FROM part listing wooop woop");
-                listing = new Listing(partnumber,link,brand,price);
-                results.Add(listing);
-            }
-            
-            else if(partnumber!=null)
-            {
-                Console.WriteLine("No part number found on product page");
-                listing = new Listing(link,price);
-                results.Add(listing);
-            }
-            
-            //by this point it has added that iteration to the list and moved on
-            
+            //Console.WriteLine("No longer available product found on ECS");
+            return null;
         }
-        return results;
+        double price = double.Parse(productNode.InnerHtml);
+        string? brand = doc.DocumentNode.SelectSingleNode("//a[@id='brandLink']")?.GetAttributeValue("title",string.Empty);
+
+        string? partnumber = doc.DocumentNode.SelectSingleNode("//dd[@class='mfg-part-definition']//span").InnerHtml;
+        //selects the partnumber hopefully fromt that mfgpartdef dd
+        if (partnumber != null && brand != null)
+        {
+            //Console.WriteLine($"Retrieved partnumber {partnumber} FROM part listing wooop woop");
+            listing = new Listing(partnumber, link, brand, price);
+            return listing;
+        }
+        else if(partnumber!=null)
+        {
+            Console.WriteLine("No part number found on product page");
+            listing = new Listing(link,price);
+            return listing;
+        }
+        
+        //by this point it has added that iteration to the list and moved on
+
+
+        return new Listing(link, price);
         
     }
 }

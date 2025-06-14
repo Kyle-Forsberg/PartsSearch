@@ -28,7 +28,15 @@ public class FCPscraper
         {
             Console.WriteLine("No results found on FCP Euro");
         }
-        var results = await FindPricesFCP(links, partNumber);
+        List<Listing>? results = new List<Listing>();
+        List<Task<Listing>> tasks = new List<Task<Listing>>();
+
+        foreach (var link in links)
+        {
+            tasks.Add(FindPricesFCP(link, partNumber));
+        }
+        Listing[] listings = await Task.WhenAll(tasks);
+        results = listings.ToList();
         return results;
         //this.finalResults = results;
 
@@ -74,7 +82,7 @@ public class FCPscraper
     
 
 
-    public async Task<List<Listing>?> FindPricesFCP(List<string> Links, string partnumber)
+    public async Task<Listing?> FindPricesFCP(string link, string partnumber)
     {
         //this takes each of the links, finds the prices and other bits of it
         //organizes them into the listing class
@@ -82,39 +90,38 @@ public class FCPscraper
 
         
         //null list check
-        if (Links.Count == 0) { Console.WriteLine("Null link, check that error to ensure Find Price is not called with a null link"); }
+        if (link.Length == 0) { Console.WriteLine("Null link, check that error to ensure Find Price is not called with a null link"); }
 
         var web = new HtmlWeb();
-        List<Listing> results = new List<Listing>();
+        Listing result;
         //load page and init list;
             
-        foreach (string link in Links)
+        
+        string html = await GetHtml(link);
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        var div = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'listing__amount')]");
+        var span = div?.SelectSingleNode(".//span");
+        if (span != null)
         {
-            string html = await GetHtml(link);
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            var div = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'listing__amount')]");
-            var span = div?.SelectSingleNode(".//span");
-            if (span != null)
+            double price = double.Parse(span.InnerHtml.Substring(1));   //think this removes the currency, from old ver
+            var brandDiv = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'listing__brand')]");
+            var brandSpan = brandDiv?.SelectSingleNode(".//span");
+
+            string brandname = string.Empty;
+            if (brandSpan == null)
             {
-                double price = double.Parse(span.InnerHtml.Substring(1));   //think this removes the currency, from old ver
-                var brandDiv = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'listing__brand')]");
-                var brandSpan = brandDiv?.SelectSingleNode(".//span");
-
-                string brandname = string.Empty;
-                if (brandSpan == null)
-                {
-                    brandname = "Unknown Brand";
-                }
-                else
-                {
-                    brandname = brandSpan.InnerHtml.Substring(1).Trim('\n', '\t'); }
-                
-                results.Add(new Listing(partnumber, link, brandname, price));
+                brandname = "Unknown Brand";
             }
-
+            else
+            {
+                brandname = brandSpan.InnerHtml.Substring(1).Trim('\n', '\t'); 
+            }
+            
+            return new Listing(partnumber, link, brandname, price);
         }
-        return results;
+
+        return null;
 
     }
 }
