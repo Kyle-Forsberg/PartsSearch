@@ -11,27 +11,59 @@ namespace PartsSearch2;
 public class PriceScraper
 {       
         public HtmlWeb Web = new HtmlWeb();
-        private string ECSlink = "https://www.ecstuning.com/Search/SiteSearch/";
-        private string UROlink = "https://www.urotuning.com/pages/search-results?q=";
-        private string FCPlink = "https://www.fcpeuro.com/Parts/?keywords=";
-        public ECSscraper ecs = new ECSscraper();
+        private FCPscraper fcp = new FCPscraper();
+        private ECSscraper ecs = new ECSscraper();
         
-        private void SearchPartNumber(string partNumber)
+        public async Task SearchPartNumber(string partNumber)
         {
                 //this is the main method of this class
                 //this should call all the other functions and search all sites
-                
-                
+                var searchTask = SearchPart(partNumber);
+                await Task.WhenAll(searchTask);
+                var searchResult = searchTask.Result;
+                PrintListings(searchResult);
 
         }
- 
-        public List<string>? SearchResultsECS(string partNumber)        //currenty string. change to Listing class later
+        public static void PrintListings(List<Listing> listings)
         {
-                return null;
+                foreach (Listing listing in listings)
+                {
+                        Console.WriteLine(listing);
+                }
         }
-        //need to ensure that each of these can be null, since some will be inevitably
-        public List<Listing>? FindPricesECS(List<string> Links)
+        public static async Task<List<Listing>?> SearchPart(string partnum)
         {
-                return null;
+                var fcp = new FCPscraper();
+                var ecs = new ECSscraper();
+        
+                var fcpTask = fcp.FCPsearch(partnum);
+                var ecsTask = ecs.ECSsearch(partnum);
+                await Task.WhenAll(fcpTask,ecsTask);
+                var fcpResults = await fcpTask;
+                var ecsResults = await ecsTask;
+
+                List<Listing> results = new List<Listing>();
+                foreach (Listing listing in fcpResults)
+                {
+                        if (listing == null)
+                        {
+                                continue;
+                        }
+                        results.Add(listing);
+                }
+
+                foreach (Listing listing in ecsResults)
+                {
+                        if (listing == null)
+                        {
+                                continue;
+                        }
+                        results.Add(listing);
+                }
+        
+                results.Sort((a , b) => a.Price.CompareTo(b.Price));
+                //above line sorts by price with this sick ass lambda 
+                return results;
+        
         }
 }

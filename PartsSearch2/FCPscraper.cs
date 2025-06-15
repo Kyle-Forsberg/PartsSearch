@@ -41,12 +41,9 @@ public class FCPscraper
             if(listing == null){continue;}
             if(listing.Price == null){continue;}
             results.Add(listing);
-            
         }
         return results;
         //this.finalResults = results;
-
-
     }
     
     public async Task<List<string>?> SearchResultsFCP(string partNumber)
@@ -66,7 +63,6 @@ public class FCPscraper
             Console.WriteLine("No results found on FCP euro :(");
             return null;
         }
-
         foreach (var node in nodes)
         {
             string? href = node.GetAttributeValue("data-href", string.Empty);
@@ -75,25 +71,15 @@ public class FCPscraper
                 results.Add("https://www.fcpeuro.com" + href);
             }
         }
-
         return results;
-
         //successful search, return LINKS to every product page of a match
     }
-
-
-    // PLEASE FINISH THE METHOD BELOW THANKS =====================================================================
-    // Also test implementation above !!!
     
-    
-
-
     public async Task<Listing?> FindPricesFCP(string link, string partnumber)
     {
         //this takes each of the links, finds the prices and other bits of it
         //organizes them into the listing class
         //and returns a list of those listings
-
         
         //null list check
         if (link.Length == 0) { Console.WriteLine("Null link, check that error to ensure Find Price is not called with a null link"); }
@@ -101,7 +87,6 @@ public class FCPscraper
         var web = new HtmlWeb();
         Listing result;
         //load page and init list;
-            
         
         string html = await GetHtml(link);
         var doc = new HtmlDocument();

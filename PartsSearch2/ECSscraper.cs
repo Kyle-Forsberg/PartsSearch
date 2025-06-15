@@ -57,7 +57,6 @@ public class ECSscraper
         foreach (var node in nodes)
         {
             var href = node.GetAttributeValue("href",string.Empty);
-                        
             //Console.WriteLine($"HREF VALUE FOR DEBUGGING: {"https://www.ecstuning.com" + href}");
             results.Add("https://www.ecstuning.com" + href);
         }
@@ -72,7 +71,6 @@ public class ECSscraper
         //and returns a list of those listings
         if(link.Length==0){Console.WriteLine("Null link, check that error to ensure Find Price is not called with a null link");}
         
- 
         var html = await GetHtml(link);
         //Console.WriteLine($"ITERATION FOR {link}");
         var doc = new HtmlDocument();
@@ -87,7 +85,6 @@ public class ECSscraper
         }
         double price = double.Parse(productNode.InnerHtml);
         string? brand = doc.DocumentNode.SelectSingleNode("//a[@id='brandLink']")?.GetAttributeValue("title",string.Empty);
-
         string? partnumber = doc.DocumentNode.SelectSingleNode("//dd[@class='mfg-part-definition']//span").InnerHtml;
         //selects the partnumber hopefully fromt that mfgpartdef dd
         if (partnumber != null && brand != null)
@@ -102,11 +99,6 @@ public class ECSscraper
             listing = new Listing(link,price);
             return listing;
         }
-        
-        //by this point it has added that iteration to the list and moved on
-
-
         return new Listing(link, price);
-        
     }
 }
