@@ -1,6 +1,9 @@
 using HtmlAgilityPack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System.CommandLine;
+using System.CommandLine.Parsing;
+using System.CommandLine.Builder;
 
 namespace PartsSearch2;
 //https://www.ecstuning.com/Search/SiteSearch/02A141165M/ 
@@ -26,9 +29,28 @@ public class PriceScraper
         }
         public static void PrintListings(List<Listing> listings)
         {
+                int i = 0;
                 foreach (Listing listing in listings)
                 {
-                        Console.WriteLine(listing);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("$");
+                        if (i < listings.Count / 3)
+                        {
+                                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        }
+                        else if (i < (listings.Count - (listings.Count / 3)))
+                        {
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        }
+                        else
+                        {
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                        }
+
+                        Console.Write(listing.Price);
+                        Console.ResetColor();
+                        Console.Write($": {listing.Brand.PadRight(20)} | {listing.Link}\n");
+                        i++;
                 }
         }
         public static async Task<List<Listing>?> SearchPart(string partnum)
