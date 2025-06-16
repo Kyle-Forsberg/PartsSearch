@@ -5,6 +5,9 @@ using System.CommandLine.Builder;
 using PartsSearch2;
 using Timer = System.Timers.Timer;
 
+
+//021905106C is partnum for vr6 ignition coil
+
 class Program
 {
     public static async Task Main(string[] args)
