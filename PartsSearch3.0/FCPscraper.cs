@@ -31,31 +31,12 @@ public class FCPscraper
     
     public async Task<List<Listing>?> FCPsearch(string partNumber)
     {
-        var links = await SearchResultsFCP(partNumber);
-        if (links == null || links.Count == 0)
-        {
-            Console.WriteLine("No results found on FCP Euro");
-            return null;
-        }
-        List<Listing>? results = new List<Listing>();
-        List<Task<Listing>> tasks = new List<Task<Listing>>();
-
-        foreach (var link in links)
-        {
-            tasks.Add(FindPricesFCP(link, partNumber));
-        }
-        Listing[] listings = await Task.WhenAll(tasks);
-        foreach (var listing in listings)
-        {
-            if(listing == null){continue;}
-            if(listing.Price == null){continue;}
-            results.Add(listing);
-        }
-        return results;
-        //this.finalResults = results;
+        var listings = SearchResultsFCP(partNumber);
+        return await listings;
+        //this is now just a wrapper of the other function but its nice to keep things orderly
     }
     
-    public async Task<List<string>?> SearchResultsFCP(string partNumber)
+    public async Task<List<Listing>?> SearchResultsFCP(string partNumber)
     {
         //makes the search in the site, and then returns links to each listing
         //hence it returning a list
@@ -70,7 +51,8 @@ public class FCPscraper
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//div[contains(@class, 'grid-x') and contains(@class, 'hit')]");
-        //above line is from version 1.0 directly, and has not been inspected since
+        //above line is from version 1.0 directly, and has not been inspected since]
+        List<Listing>? resultsList = new List<Listing>();
         if (nodes == null)
         {
             Console.WriteLine("No results found on FCP euro :(");
@@ -79,12 +61,19 @@ public class FCPscraper
         foreach (var node in nodes)
         {
             string? href = node.GetAttributeValue("data-href", string.Empty);
+            string? pricestr =  node.GetAttributeValue("data-price", string.Empty);
+            string brand = node.GetAttributeValue("data-brand", string.Empty);
+            
+            // all this info is avalible right there, might aswell take it from here.
             if (href != string.Empty)
             {
                 results.Add("https://www.fcpeuro.com" + href);
+                resultsList.Add(new Listing(partNumber, link, brand, double.Parse(pricestr)));
+
             }
         }
-        return results;
+
+        return resultsList;
         //successful search, return LINKS to every product page of a match
     }
     
