@@ -32,7 +32,7 @@ public class Listing
     {
         if (this.Brand!=null)
         {
-            return $"{this.Price}: {this.Brand.PadRight(20)} | {this.Link}";
+            return $"{this.Price.ToString("F2").PadRight(8)}: {this.Brand.PadRight(20)} | {this.Link}";
         }
         return $"{this.Price} | {this.Link}";
     }

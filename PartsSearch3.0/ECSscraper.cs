@@ -30,7 +30,7 @@ public class ECSscraper
         return null;
     }
     
-    public List<Listing> SearchResultsECS(string partNumber)
+    public async Task<List<Listing>?> SearchResultsECS(string partNumber)
     {
         //makes the search in the site, and then returns links to each listing
         //hence it returning a list
@@ -58,8 +58,13 @@ public class ECSscraper
             }
   
             double price = double.Parse(priceNode.InnerText.Trim().Substring(1));
-            var href = node.GetAttributeValue("href",string.Empty);
-            Listing l = new Listing(partNumber, "https://www.ecstuning.com" + href, "UNKNOWN BRAND", price);
+            var linkNode = node.SelectSingleNode(".//a[@class='listingThumbWrap']");
+            var href = linkNode.GetAttributeValue("href",string.Empty);
+            string? brand = linkNode.GetAttributeValue("title", string.Empty);
+            brand = brand?.Substring(0, brand.IndexOf(" "));
+            //this little hack works because ECS keeps the name of the brand in the first part of this
+            //little description here
+            Listing l = new Listing(partNumber, "https://www.ecstuning.com" + href, brand, price);
             
             
             resultsList.Add(l);
