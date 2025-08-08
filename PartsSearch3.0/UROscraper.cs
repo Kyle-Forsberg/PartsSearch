@@ -1,6 +1,13 @@
+using System.Threading.Channels;
+
 namespace PartsSearch3;
 
 using System.Net;
+using System.Threading.Tasks;
+using PuppeteerSharp;
+//this needed to simulate a real browser to
+//access all those pesky javascript elements that have 
+//made this so hard in the past
 using HtmlAgilityPack;
 
 //main price is stored in
@@ -44,15 +51,11 @@ public class UROscraper
 
     public async Task<List<Listing>?> UROsearch(string partNumber)
     {
-        //here is the main asynchronus method for searching.
-        List<Listing> results = new List<Listing>();
-        List<string> links = await this.SearchResultsURO(partNumber);
-        
-        
+        //yeah little redundant ill get things in order later
+        List<Listing> results = await this.GetData(partNumber);
         return results;
+        
     }
-    
-    
     
     //Urotuning how I loathe you
     //this must be done the old way, since I get the old 403 forbidden from them this way.
@@ -61,11 +64,16 @@ public class UROscraper
     { 
         List<string> results = new List<string>();
         string link = "https://www.urotuning.com/pages/search-results?q=" + partNumber;
-        string html = await client.GetStringAsync(link);
-        if (html == null) { return null; }
+        string html = await GetHtml(link);
+        if (html == null) {
+            Console.WriteLine("Link was not found");
+            return null; 
+        }
 
-        var doc = new HtmlDocument();
+        //Console.WriteLine(html);    //lets just see what is actually reported
+        var doc = new HtmlDocument(); 
         doc.LoadHtml(html);
+        
         var nodes = doc.DocumentNode.SelectNodes("//span[contains(@class, 'findify-main-price')]");
         Console.WriteLine("Found " + nodes.Count + " results");
         foreach (var node in nodes)
@@ -74,13 +82,55 @@ public class UROscraper
         }
         return null;
     }
-
-    public async Task<Listing?> GetListing(string partNumber)
+    
+    public async Task<List<Listing>?> GetData(string partnumber)
     {
-        Listing result = null;
+        Console.WriteLine("start of get data");
+
+        await new BrowserFetcher().DownloadAsync();     //i guess this has to download chromium yipee
         
-        
-        return result;
+        var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+        Console.WriteLine("checkpoint 0");
+        var page = await browser.NewPageAsync();
+        Console.WriteLine("checkpoint 1");
+
+        var url = $"https://www.urotuning.com/pages/search-results?q={Uri.EscapeDataString(partnumber)}";
+        await page.GoToAsync(url);
+        Console.WriteLine("checkpoint 2");
+
+        await page.WaitForSelectorAsync(".findify-main-price");
+        Console.WriteLine("checkpoint 3");
+
+        var products = await page.EvaluateFunctionAsync<Listing[]>(@"() => {
+            const results = [];
+            const priceEls = document.querySelectorAll('.findify-main-price');
+            const titleEls = document.querySelectorAll('.findify-components--cards--product--title');
+            const linkEls = document.querySelectorAll('.findify-components--cards--product--image a');
+            const brandEls = document.querySelectorAll('.findify-components--cards--product--brand');
+            
+            for (let i = 0; i < priceEls.length; i++) {
+                const priceText = priceEls[i].innerText.trim().replace(/[^\d\.]/g, '');
+                const price = parseFloat(priceText) || 0;
+
+                const title = titleEls[i] ? titleEls[i].innerText.trim() : "";
+                const link = linkEls[i] ? linkEls[i].href : "";
+                const brand = brandEls[i] ? brandEls[i].innerText.trim() : "";
+
+                results.push({
+                    Partnumber: title,
+                    Link: link,
+                    Brand: brand,
+                    Price: price
+                });
+            }
+            return results;
+        }");
+
+
+
+        await browser.CloseAsync();
+        Console.WriteLine("end of get data");
+        return products != null ? new List<Listing>(products) : null;
     }
     
 }
