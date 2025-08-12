@@ -542,19 +542,19 @@
     ]
   },
   "packageFolders": {
-    "/home/kyle/.nuget/packages/": {}
+    "/Users/kyleforsberg/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
+      "projectUniqueName": "/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
       "projectName": "PartsSearch3.0",
-      "projectPath": "/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
-      "packagesPath": "/home/kyle/.nuget/packages/",
-      "outputPath": "/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/obj/",
+      "projectPath": "/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
+      "packagesPath": "/Users/kyleforsberg/.nuget/packages/",
+      "outputPath": "/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/kyle/.nuget/NuGet/NuGet.Config"
+        "/Users/kyleforsberg/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -578,7 +578,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0": {
@@ -612,18 +612,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[9.0.5, 9.0.5]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.106/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.201/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

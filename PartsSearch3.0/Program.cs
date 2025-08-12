@@ -6,6 +6,9 @@ namespace PartsSearch3;
 class Program
 {
     
+    //FCP euro links are broken
+    //add kerma TDI, Europa parts, cascade German...
+    //list goes on for improvements.
     
     
     public static async Task Main(string[] args)
@@ -34,3 +37,4 @@ class Program
         }
     }
 }
+
