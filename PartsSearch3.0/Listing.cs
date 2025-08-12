@@ -2,10 +2,14 @@ namespace PartsSearch3;
 
 public class Listing
 {
-    public double Price { get; set; } 
-    public string? Partnumber { get; set; } 
+    
+    public string? Partnumber { get; set; }
     public string? Link { get; set; }
     public string? Brand { get; set; }
+    public double Price { get; set; } 
+
+    //moved these around to work better with the JS
+    public Listing() { }
 
     public Listing(string partnumber, string link, string brand, double price)
     {

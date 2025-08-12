@@ -10,32 +10,27 @@ class Program
     
     public static async Task Main(string[] args)
     {
-        Console.WriteLine("Please be fr");
-        string partnumber = Console.ReadLine();
-        ECSscraper ecsscraper = new ECSscraper();
-        var ListingsECS = await ecsscraper.SearchResultsECS(partnumber);
-        Console.WriteLine("be fr 1.5");
-        //still running synchronously while subsections are in development
-        foreach (var l in ListingsECS)
+        if (args.Length != 1)
         {
-            Console.WriteLine(l);
+            Console.WriteLine("Usage: PartsSearch <Partnumber>");
+            return;
         }
+        ECSscraper ecs = new ECSscraper();
+        FCPscraper fcp = new FCPscraper();
+        UROscraper uro = new UROscraper();
+        
+        var fcptask = fcp.SearchResults(args[0]);
+        var ecstask = ecs.SearchResults(args[0]);
+        var urotask = uro.SearchResults(args[0]);
+        
+        var results = await Task.WhenAll(fcptask, ecstask, urotask);
+        
+        var allListings = results.SelectMany(list => list).ToList();
+        allListings.Sort((a, b) => a.Price.CompareTo(b.Price));
 
-        Console.WriteLine("Be fr 2");
-        FCPscraper fcpscraper = new FCPscraper();
-        var ListingsFCP = await fcpscraper.SearchResultsFCP(partnumber);
-        foreach (var l in ListingsFCP)
+        foreach (var listing in allListings)
         {
-            Console.WriteLine(l);
+            Console.WriteLine(listing);
         }
-        Console.WriteLine("Be fr 3");
-        UROscraper uroscraper = new UROscraper();
-        Console.WriteLine("pretty please write something after this line");
-        var uroresults = await uroscraper.UROsearch(partnumber);
-        foreach (var uro in uroresults)
-        {
-            Console.WriteLine(uro);
-        }
-        Console.WriteLine("STOP RUN");
     }
 }

@@ -5,6 +5,9 @@ namespace PartsSearch3;
 using System.Net;
 using System.Threading.Tasks;
 using PuppeteerSharp;
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 //this needed to simulate a real browser to
 //access all those pesky javascript elements that have 
 //made this so hard in the past
@@ -48,89 +51,71 @@ public class UROscraper
         }
         return null;
     }
-
-    public async Task<List<Listing>?> UROsearch(string partNumber)
-    {
-        //yeah little redundant ill get things in order later
-        List<Listing> results = await this.GetData(partNumber);
-        return results;
-        
-    }
+    
     
     //Urotuning how I loathe you
     //this must be done the old way, since I get the old 403 forbidden from them this way.
     //maybe that has been my problem all along?
-    public async Task<List<string?>> SearchResultsURO(string partNumber)
-    { 
-        List<string> results = new List<string>();
-        string link = "https://www.urotuning.com/pages/search-results?q=" + partNumber;
-        string html = await GetHtml(link);
-        if (html == null) {
-            Console.WriteLine("Link was not found");
-            return null; 
-        }
 
-        //Console.WriteLine(html);    //lets just see what is actually reported
-        var doc = new HtmlDocument(); 
-        doc.LoadHtml(html);
-        
-        var nodes = doc.DocumentNode.SelectNodes("//span[contains(@class, 'findify-main-price')]");
-        Console.WriteLine("Found " + nodes.Count + " results");
-        foreach (var node in nodes)
-        {
-            Console.WriteLine(node.InnerText);
-        }
-        return null;
-    }
     
-    public async Task<List<Listing>?> GetData(string partnumber)
+    public async Task<List<Listing>?> SearchResults(string partnumber)
     {
-        Console.WriteLine("start of get data");
+
 
         await new BrowserFetcher().DownloadAsync();     //i guess this has to download chromium yipee
         
         var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
-        Console.WriteLine("checkpoint 0");
-        var page = await browser.NewPageAsync();
-        Console.WriteLine("checkpoint 1");
 
+        var page = await browser.NewPageAsync();
+        
         var url = $"https://www.urotuning.com/pages/search-results?q={Uri.EscapeDataString(partnumber)}";
         await page.GoToAsync(url);
-        Console.WriteLine("checkpoint 2");
-
+        
         await page.WaitForSelectorAsync(".findify-main-price");
-        Console.WriteLine("checkpoint 3");
 
-        var products = await page.EvaluateFunctionAsync<Listing[]>(@"() => {
-            const results = [];
-            const priceEls = document.querySelectorAll('.findify-main-price');
-            const titleEls = document.querySelectorAll('.findify-components--cards--product--title');
-            const linkEls = document.querySelectorAll('.findify-components--cards--product--image a');
-            const brandEls = document.querySelectorAll('.findify-components--cards--product--brand');
-            
-            for (let i = 0; i < priceEls.length; i++) {
-                const priceText = priceEls[i].innerText.trim().replace(/[^\d\.]/g, '');
-                const price = parseFloat(priceText) || 0;
 
-                const title = titleEls[i] ? titleEls[i].innerText.trim() : "";
-                const link = linkEls[i] ? linkEls[i].href : "";
-                const brand = brandEls[i] ? brandEls[i].innerText.trim() : "";
-
-                results.push({
-                    Partnumber: title,
-                    Link: link,
-                    Brand: brand,
-                    Price: price
-                });
+        var rawJson = await page.EvaluateFunctionAsync<string>(
+            "() => JSON.stringify((() => { " +
+            "const results = [];" +
+            "const priceEls = document.querySelectorAll('.findify-main-price');" +
+            "const titleEls = document.querySelectorAll('.findify-components--cards--product--title');" +
+            "const linkEls = document.querySelectorAll('.findify-components--cards--product.findify-search-card');" +
+            "const brandEls = document.querySelectorAll('.findify-components--product-brand-container img');" +
+            "for (let i = 0; i < priceEls.length; i++) {" +
+            "  const priceText = priceEls[i]?.innerText.trim().replace(/[^\\d\\.]/g, '') || '';" +
+            "  const price = parseFloat(priceText) || 0;" +
+            "  const title = titleEls[i]?.innerText.trim() || '';" +
+            "  const link = linkEls[i]?.getAttribute('href') || '';" +
+            "  const brand = brandEls[i]?.getAttribute('alt')?.trim() || '';" +
+            "  results.push({ Partnumber: title, Link: link, Brand: brand, Price: price });" +
+            "}" +
+            "return results;" +
+            "})())"
+        );
+        //Console.WriteLine(rawJson);
+        var listings = System.Text.Json.JsonSerializer.Deserialize<List<Listing>?>(rawJson);
+        foreach(var listing in listings)
+        {
+            if (listing.Brand != null)
+            {
+                if (listing.Brand.Length <= 3)
+                {
+                    listing.Brand = listing.Brand.ToUpper();
+                }
+                else
+                {
+                    listing.Brand = listing.Brand.Substring(0, 1).ToUpper() + listing.Brand.Substring(1);
+                    //capitalize first letter, surely there is a better way to do this!
+                }
             }
-            return results;
-        }");
 
-
-
+            if (listing.Link != null)
+            {
+                listing.Link = "https://www.urotuning.com" +  listing.Link;
+            }
+        }
         await browser.CloseAsync();
-        Console.WriteLine("end of get data");
-        return products != null ? new List<Listing>(products) : null;
+        return listings;
     }
     
 }

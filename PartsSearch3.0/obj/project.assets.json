@@ -126,6 +126,19 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
+      "Newtonsoft.Json/13.0.4-beta1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "PuppeteerSharp/20.2.2": {
         "type": "package",
         "dependencies": {
@@ -452,6 +465,36 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Newtonsoft.Json/13.0.4-beta1": {
+      "sha512": "6V0WDUzcU5p3R2/RN6UC+1wJtWfCB9YahSUe37mSGbPoH+Q84HTOjmsLIgynkZwJb/NYv0vFARSvDdUse3ZODA==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.4-beta1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.4-beta1.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
     "PuppeteerSharp/20.2.2": {
       "sha512": "66l7Uzh4mzTaFqRkkP62Jno/lh+ORNEHY2QjtevbQwqQ6TO1w80wZqNGeUR416aw8AEEFZs8vO9MOaJx8i9ySw==",
       "type": "package",
@@ -493,24 +536,25 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "HtmlAgilityPack >= 1.12.2",
+      "Newtonsoft.Json >= 13.0.4-beta1",
       "PuppeteerSharp >= 20.2.2",
       "Selenium.WebDriver >= 4.34.0"
     ]
   },
   "packageFolders": {
-    "/Users/kyleforsberg/.nuget/packages/": {}
+    "/home/kyle/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
+      "projectUniqueName": "/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
       "projectName": "PartsSearch3.0",
-      "projectPath": "/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
-      "packagesPath": "/Users/kyleforsberg/.nuget/packages/",
-      "outputPath": "/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/obj/",
+      "projectPath": "/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
+      "packagesPath": "/home/kyle/.nuget/packages/",
+      "outputPath": "/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/kyleforsberg/.nuget/NuGet/NuGet.Config"
+        "/home/kyle/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -534,7 +578,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -543,6 +587,10 @@
           "HtmlAgilityPack": {
             "target": "Package",
             "version": "[1.12.2, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.4-beta1, )"
           },
           "PuppeteerSharp": {
             "target": "Package",
@@ -564,12 +612,18 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[9.0.5, 9.0.5]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.201/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.106/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

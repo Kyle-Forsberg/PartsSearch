@@ -31,12 +31,12 @@ public class FCPscraper
     
     public async Task<List<Listing>?> FCPsearch(string partNumber)
     {
-        var listings = SearchResultsFCP(partNumber);
+        var listings = SearchResults(partNumber);
         return await listings;
         //this is now just a wrapper of the other function but its nice to keep things orderly
     }
     
-    public async Task<List<Listing>?> SearchResultsFCP(string partNumber)
+    public async Task<List<Listing>?> SearchResults(string partNumber)
     {
         //makes the search in the site, and then returns links to each listing
         //hence it returning a list

@@ -30,7 +30,7 @@ public class ECSscraper
         return null;
     }
     
-    public async Task<List<Listing>?> SearchResultsECS(string partNumber)
+    public async Task<List<Listing>?> SearchResults(string partNumber)
     {
         //makes the search in the site, and then returns links to each listing
         //hence it returning a list

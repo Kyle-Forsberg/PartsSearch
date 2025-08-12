@@ -49,3 +49,11 @@
 /Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Microsoft.Extensions.Options.dll
 /Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Microsoft.Extensions.Primitives.dll
 /Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/PuppeteerSharp.dll
+/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Microsoft.Extensions.DependencyInjection.dll
+/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Microsoft.Extensions.Logging.dll
+/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Microsoft.Extensions.Logging.Abstractions.dll
+/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Microsoft.Extensions.Options.dll
+/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Microsoft.Extensions.Primitives.dll
+/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/PuppeteerSharp.dll
+/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Newtonsoft.Json.dll
