@@ -12,24 +12,7 @@ public class KermaTDIscraper
 {
     private static readonly HttpClient client = new HttpClient();
     
-    public async Task<string> GetHtml(string url)
-    {
-        var req = new HttpRequestMessage(HttpMethod.Get, url);
-        req.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-                                       "AppleWebKit/537.36 (KHTML, like Gecko) " +
-                                       "Chrome/114.0.0.0 Safari/537.36");
-        try
-        {
-            var resp = await client.SendAsync(req);
-            resp.EnsureSuccessStatusCode();
-            return await resp.Content.ReadAsStringAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Nothing found on FCP euro");
-        }
-        return null;
-    }
+    
 
     public async Task<List<Listing>> SearchResults(string partnumber)
     {
@@ -66,7 +49,7 @@ public class KermaTDIscraper
 
         if (nodes == null || nodes.Count == 0)
         {
-            Console.WriteLine("No results found on Kermatdi :(");
+            //Console.WriteLine("No results found on Kermatdi :(");
             return new List<Listing>();
         }
 
@@ -102,6 +85,5 @@ public class KermaTDIscraper
 
         return resultsList;
     }
-    
     
 }
