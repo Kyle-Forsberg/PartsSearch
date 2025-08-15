@@ -1,6 +1,3 @@
-/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/selenium-manager/linux/selenium-manager
-/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/selenium-manager/macos/selenium-manager
-/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/selenium-manager/windows/selenium-manager.exe
 /home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/PartsSearch3.0
 /home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/PartsSearch3.0.deps.json
 /home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/PartsSearch3.0.runtimeconfig.json
