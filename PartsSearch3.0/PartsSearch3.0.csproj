@@ -13,6 +13,7 @@
       <PackageReference Include="Newtonsoft.Json" Version="13.0.4-beta1" />
       <PackageReference Include="PuppeteerSharp" Version="20.2.2" />
       <PackageReference Include="Selenium.WebDriver" Version="4.34.0" />
+      <PackageReference Include="Spectre.Console" Version="0.50.1-preview.0.25" />
     </ItemGroup>
 
 </Project>

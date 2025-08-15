@@ -59,6 +59,10 @@
             "Selenium.WebDriver": {
               "target": "Package",
               "version": "[4.34.0, )"
+            },
+            "Spectre.Console": {
+              "target": "Package",
+              "version": "[0.50.1-preview.0.25, )"
             }
           },
           "imports": [

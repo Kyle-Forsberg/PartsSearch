@@ -54,11 +54,8 @@ public class UROscraper
     
     
     //Urotuning how I loathe you
-    //this must be done the old way, since I get the old 403 forbidden from them this way.
-    //maybe that has been my problem all along?
 
-    
-    public async Task<List<Listing>?> SearchResults(string partnumber)
+    public async Task<List<Listing>> SearchResults(string partnumber)
     {
 
 

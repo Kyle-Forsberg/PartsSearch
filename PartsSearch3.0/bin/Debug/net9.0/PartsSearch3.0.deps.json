@@ -11,7 +11,8 @@
           "HtmlAgilityPack": "1.12.2",
           "Newtonsoft.Json": "13.0.4-beta1",
           "PuppeteerSharp": "20.2.2",
-          "Selenium.WebDriver": "4.34.0"
+          "Selenium.WebDriver": "4.34.0",
+          "Spectre.Console": "0.50.1-preview.0.25"
         },
         "runtime": {
           "PartsSearch3.0.dll": {}
@@ -114,6 +115,14 @@
             "fileVersion": "4.0.0.0"
           }
         }
+      },
+      "Spectre.Console/0.50.1-preview.0.25": {
+        "runtime": {
+          "lib/net9.0/Spectre.Console.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.50.1.0"
+          }
+        }
       }
     }
   },
@@ -192,6 +201,13 @@
       "sha512": "sha512-uNx+GF7WugHDPV2zpGDPlbSn3STQ6n0xFskFSeJdhEuuUTkIDfAsYnjVUiQidWDpy7mKzTz53ae7Thjghl3dng==",
       "path": "selenium.webdriver/4.34.0",
       "hashPath": "selenium.webdriver.4.34.0.nupkg.sha512"
+    },
+    "Spectre.Console/0.50.1-preview.0.25": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qJwxRp2Y9wMpVO9kDdpbRgbGWqtIPh0e6OaQqx6aety8Hs3pkx41HPuzXAZfBBvXYNgTWoI48v0UjwdTc8wa7A==",
+      "path": "spectre.console/0.50.1-preview.0.25",
+      "hashPath": "spectre.console.0.50.1-preview.0.25.nupkg.sha512"
     }
   }
 }

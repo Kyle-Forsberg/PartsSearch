@@ -9,7 +9,7 @@ public class ECSscraper
 {
     private static readonly HttpClient client = new HttpClient();
 
-    public string? GetHtml(string url)
+    public async Task<string?> GetHtml(string url)
     {
         
         var req = new HttpRequestMessage(HttpMethod.Get, url);
@@ -30,20 +30,20 @@ public class ECSscraper
         return null;
     }
     
-    public async Task<List<Listing>?> SearchResults(string partNumber)
+    public async Task<List<Listing>> SearchResults(string partNumber)
     {
         //makes the search in the site, and then returns links to each listing
         //hence it returning a list
         string link = "https://www.ecstuning.com/Search/SiteSearch/" + partNumber;
-        string html = GetHtml(link);
+        string html = await GetHtml(link);
         //Console.WriteLine(html);
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//div[contains(@class,'productListBox')]");
-        if (nodes == null)
+        if (nodes == null)      //rider says always false, but that's BS this totally works
         {
             Console.WriteLine("No search results found on ECS");
-            return null;    //;(
+            return new List<Listing>();    //;(
         }
 
         List<Listing> resultsList = new List<Listing>();
@@ -65,7 +65,6 @@ public class ECSscraper
             //this little hack works because ECS keeps the name of the brand in the first part of this
             //little description here
             Listing l = new Listing(partNumber, "https://www.ecstuning.com" + href, brand, price);
-            
             
             resultsList.Add(l);
             //so currently, this function can return both the hrefs for the listings and their price,
