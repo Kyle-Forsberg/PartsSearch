@@ -55,3 +55,5 @@
 /home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/PuppeteerSharp.dll
 /home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Newtonsoft.Json.dll
 /home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Spectre.Console.dll
+/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Newtonsoft.Json.dll
+/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/bin/Debug/net9.0/Spectre.Console.dll

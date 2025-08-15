@@ -2,6 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/../PartsSearch" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../PartsSearch2" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../StartupDisplay" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../throwsDB" vcs="Git" />
   </component>
 </project>

@@ -19,46 +19,11 @@ using HtmlAgilityPack;
 public class UROscraper
 {
     //dreaded Uro Tuning scraper
-    //seeing as how UroTunings Website is such a hellscape, I dont forsee this going well
-    
-    
-    public static HttpClientHandler handler = new HttpClientHandler()
-    {
-        UseCookies = true,
-        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-    };
-    private static readonly HttpClient client = new HttpClient(handler);
-    
-    public async Task<string> GetHtml(string url)
-    {
-        var req = new HttpRequestMessage(HttpMethod.Get, url);
-        req.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-                                       "AppleWebKit/537.36 (KHTML, like Gecko) " +
-                                       "Chrome/114.0.0.0 Safari/537.36");
-        req.Headers.Accept.ParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-        req.Headers.AcceptLanguage.ParseAdd("en-US,en;q=0.5");
-        req.Headers.Add("Connection", "keep-alive");
-        req.Headers.Add("Upgrade-Insecure-Requests", "1");
-        try
-        {
-            var resp = await client.SendAsync(req);
-            resp.EnsureSuccessStatusCode();
-            return await resp?.Content.ReadAsStringAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Nothing found on FCP euro");
-        }
-        return null;
-    }
-    
-    
+
     //Urotuning how I loathe you
 
     public async Task<List<Listing>> SearchResults(string partnumber)
     {
-
-
         await new BrowserFetcher().DownloadAsync();     //i guess this has to download chromium yipee
         
         var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
@@ -67,10 +32,8 @@ public class UROscraper
         
         var url = $"https://www.urotuning.com/pages/search-results?q={Uri.EscapeDataString(partnumber)}";
         await page.GoToAsync(url);
-        
         await page.WaitForSelectorAsync(".findify-main-price");
-
-
+        
         var rawJson = await page.EvaluateFunctionAsync<string>(
             "() => JSON.stringify((() => { " +
             "const results = [];" +

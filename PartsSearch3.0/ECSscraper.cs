@@ -42,7 +42,7 @@ public class ECSscraper
         var nodes = doc.DocumentNode.SelectNodes("//div[contains(@class,'productListBox')]");
         if (nodes == null)      //rider says always false, but that's BS this totally works
         {
-            Console.WriteLine("No search results found on ECS");
+            //Console.WriteLine("No search results found on ECS");
             return new List<Listing>();    //;(
         }
 

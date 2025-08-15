@@ -35,7 +35,7 @@ public class FCPscraper
 
         string link = "https://www.fcpeuro.com/Parts/?keywords=" + partNumber;   //base link for doing searches
         string html = await GetHtml(link);
-        if (html.Length == 0)   //check to make sure we found a usable link before we move on
+        if (html == null || html.Length == 0)   //check to make sure we found a usable link before we move on
         {
             return new List<Listing>();
         }
@@ -47,7 +47,7 @@ public class FCPscraper
         List<Listing>? resultsList = new List<Listing>();
         if (nodes.Count == 0)
         {
-            Console.WriteLine("No results found on FCP euro :(");
+            //Console.WriteLine("No results found on FCP euro :(");
             return new List<Listing>();
         }
         foreach (var node in nodes)

@@ -1,21 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "IH603W7sqr4=",
+  "dgSpecHash": "/jrW+8qFPKo=",
   "success": true,
-  "projectFilePath": "/home/kyle/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
+  "projectFilePath": "/Users/kyleforsberg/RiderProjects/PartsSearch3.0/PartsSearch3.0/PartsSearch3.0.csproj",
   "expectedPackageFiles": [
-    "/home/kyle/.nuget/packages/htmlagilitypack/1.12.2/htmlagilitypack.1.12.2.nupkg.sha512",
-    "/home/kyle/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.0/microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
-    "/home/kyle/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
-    "/home/kyle/.nuget/packages/microsoft.extensions.logging/8.0.0/microsoft.extensions.logging.8.0.0.nupkg.sha512",
-    "/home/kyle/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.0/microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
-    "/home/kyle/.nuget/packages/microsoft.extensions.options/8.0.0/microsoft.extensions.options.8.0.0.nupkg.sha512",
-    "/home/kyle/.nuget/packages/microsoft.extensions.primitives/8.0.0/microsoft.extensions.primitives.8.0.0.nupkg.sha512",
-    "/home/kyle/.nuget/packages/newtonsoft.json/13.0.4-beta1/newtonsoft.json.13.0.4-beta1.nupkg.sha512",
-    "/home/kyle/.nuget/packages/puppeteersharp/20.2.2/puppeteersharp.20.2.2.nupkg.sha512",
-    "/home/kyle/.nuget/packages/selenium.webdriver/4.34.0/selenium.webdriver.4.34.0.nupkg.sha512",
-    "/home/kyle/.nuget/packages/spectre.console/0.50.1-preview.0.25/spectre.console.0.50.1-preview.0.25.nupkg.sha512",
-    "/home/kyle/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.5/microsoft.aspnetcore.app.ref.9.0.5.nupkg.sha512"
+    "/Users/kyleforsberg/.nuget/packages/htmlagilitypack/1.12.2/htmlagilitypack.1.12.2.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.0/microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/microsoft.extensions.logging/8.0.0/microsoft.extensions.logging.8.0.0.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.0/microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/microsoft.extensions.options/8.0.0/microsoft.extensions.options.8.0.0.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/microsoft.extensions.primitives/8.0.0/microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/newtonsoft.json/13.0.4-beta1/newtonsoft.json.13.0.4-beta1.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/puppeteersharp/20.2.2/puppeteersharp.20.2.2.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/selenium.webdriver/4.34.0/selenium.webdriver.4.34.0.nupkg.sha512",
+    "/Users/kyleforsberg/.nuget/packages/spectre.console/0.50.1-preview.0.25/spectre.console.0.50.1-preview.0.25.nupkg.sha512"
   ],
   "logs": []
 }
