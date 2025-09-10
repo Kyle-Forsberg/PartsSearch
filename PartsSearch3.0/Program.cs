@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using PuppeteerSharp.BrowserData;
+using System.Diagnostics;
 
 namespace PartsSearch3;
 
@@ -15,6 +16,7 @@ class Program
         {
             Console.WriteLine("Usage: PartsSearch <Partnumber>");
             return;
+
         }
 
         if (args.Length > 1)
@@ -51,6 +53,7 @@ class Program
     
     public static async Task Main(string[] args)
     {
+        Stopwatch stopwatch = Stopwatch.StartNew();
         if (args.Length < 1)
         {
             Console.WriteLine("Usage: PartsSearch <Partnumber>");
@@ -98,6 +101,10 @@ class Program
         }
 
         AnsiConsole.Write(table);
+        stopwatch.Stop();
+        TimeSpan ts = stopwatch.Elapsed;
+        Console.WriteLine($"Total runtime: {ts.TotalMilliseconds/1000} seconds");
+
     }
     
     

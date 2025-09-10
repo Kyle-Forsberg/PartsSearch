@@ -18,7 +18,7 @@ public class ECSscraper
                                        "Chrome/114.0.0.0 Safari/537.36");
         try
         {
-            var resp = client.Send(req);
+            var resp = await client.SendAsync(req);
             resp.EnsureSuccessStatusCode();
             return resp?.Content?.ReadAsStringAsync().Result;
         }
