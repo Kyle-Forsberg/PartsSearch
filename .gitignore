@@ -1,2 +1,55 @@
 /PartsSearch3.0/debug-success.html
 /PartsSearch3.0/debug.html
+
+# .NET build outputs
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.cache
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / Rider
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# NuGet packages (restore them, don't commit)
+*.nupkg
+*.snupkg
+packages/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Publish outputs
+publish/
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Chrome downloads from PuppeteerSharp
+.local-chromium/
