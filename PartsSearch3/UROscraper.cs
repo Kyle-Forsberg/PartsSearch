@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-//this needed to simulate a real browser to
-//access all those pesky javascript elements that have 
-//made this so hard in the past
 using HtmlAgilityPack;
 
 //main price is stored in
@@ -24,33 +20,17 @@ public class UROscraper
 
     public async Task<List<Listing>> SearchResults(string partnumber)
     {
-        //added to ease permissions issue 
-        //string userChromePath = Path.Combine(
-          //  Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), 
-           // ".local-chromium"
-        //);
-
-        //var fetcher = new BrowserFetcher(new BrowserFetcher.DefaultRevision);      //Path = userChromePath }
-        ///var revisionInfo = await fetcher.DownloadAsync();
-
-        var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+        var page = await BrowserManager.Instance.GetNewPageAsync();
+        
+        try
         {
-            Headless = true , 
-        });
-        var page = await  browser.NewPageAsync();
-        
-        
-        
-        
-        //var browserFetcher = new BrowserFetcher();
-        //await browserFetcher.DownloadAsync();
-        //var browser = await Puppeteer.LaunchAsync(new LaunchOptions{Headless = true , });
-
-        //var page = await browser.NewPageAsync();
-        
-        var url = $"https://www.urotuning.com/pages/search-results?q={Uri.EscapeDataString(partnumber)}";
-        await page.GoToAsync(url);
-        await page.WaitForSelectorAsync(".findify-main-price");
+            var url = $"https://www.urotuning.com/pages/search-results?q={Uri.EscapeDataString(partnumber)}";
+            await page.GoToAsync(url, new NavigationOptions
+            {
+                WaitUntil = new[] { WaitUntilNavigation.Networkidle2 },
+                Timeout = 30000
+            });
+            await page.WaitForSelectorAsync(".findify-main-price", new WaitForSelectorOptions { Timeout = 10000 });
         
         var rawJson = await page.EvaluateFunctionAsync<string>(
             "() => JSON.stringify((() => { " +
@@ -70,8 +50,8 @@ public class UROscraper
             "return results;" +
             "})())"
         );
-        //Console.WriteLine(rawJson);
-        var listings = System.Text.Json.JsonSerializer.Deserialize<List<Listing>?>(rawJson);
+        
+        var listings = System.Text.Json.JsonSerializer.Deserialize<List<Listing>?>(rawJson) ?? new List<Listing>();
         foreach(var listing in listings)
         {
             if (listing.Brand != null)
@@ -83,7 +63,6 @@ public class UROscraper
                 else
                 {
                     listing.Brand = listing.Brand.Substring(0, 1).ToUpper() + listing.Brand.Substring(1);
-                    //capitalize first letter, surely there is a better way to do this!
                 }
             }
 
@@ -92,8 +71,15 @@ public class UROscraper
                 listing.Link = "https://www.urotuning.com" +  listing.Link;
             }
         }
-        await browser.CloseAsync();
+        
+        await page.CloseAsync();
         return listings;
     }
-    
+    catch (Exception e)
+    {
+        Console.WriteLine($"Error scraping UROtuning: {e.Message}");
+        await page.CloseAsync();
+        return new List<Listing>();
+    }
+    }
 }

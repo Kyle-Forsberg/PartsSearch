@@ -1,7 +1,5 @@
 using System.Net.WebSockets;
 using HtmlAgilityPack;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
 namespace PartsSearch3;
 
@@ -12,7 +10,7 @@ public class ECSscraper
     public async Task<string?> GetHtml(string url)
     {
         
-        var req = new HttpRequestMessage(HttpMethod.Get, url);
+        var req =  new HttpRequestMessage(HttpMethod.Get, url);
         req.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
                                        "AppleWebKit/537.36 (KHTML, like Gecko) " +
                                        "Chrome/115.0.0.0 Safari/537.36");

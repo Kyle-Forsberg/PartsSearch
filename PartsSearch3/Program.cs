@@ -32,15 +32,20 @@ class Program
         FCPscraper fcp = new FCPscraper();
         UROscraper uro = new UROscraper();
         KermaTDIscraper kerma = new KermaTDIscraper();
-   
+  	
+        Console.WriteLine("Task Creating...");	
         
         var fcptask = fcp.SearchResults(args[0]);
         var ecstask = ecs.SearchResults(args[0]);
         var urotask = uro.SearchResults(args[0]);
         var kermaTask = kerma.SearchResults(args[0]);
         
+	Console.WriteLine("Awaiting tasks now...");
+
         var results = await Task.WhenAll(fcptask, ecstask, urotask, kermaTask);
         var allListings = results.SelectMany(list => list).ToList();
+	
+	Console.WriteLine("all listings recovered and made into list");
 
        allListings.Sort((a, b) => a.Price.CompareTo(b.Price));
 
@@ -53,6 +58,7 @@ class Program
     
     public static async Task Main(string[] args)
     {
+	//Console.WriteLine("BEGIN");
         if (args.Length < 1)
         {
             Console.WriteLine("Usage: PartsSearch <Partnumber>");
@@ -64,26 +70,35 @@ class Program
             for (int i = 1; i < args.Length; i++)
             {
                 args[0] += args[i];
-                //combine all args into the first one
-                //should just make it its own variable but whatever this works for now
             }
-        }
+       }
+
+	//Console.WriteLine("About to create Browser Manager");
+
+        await BrowserManager.Instance.InitializeAsync();
+
+	//Console.WriteLine("Browser Manager Created");
 
         ECSscraper ecs = new ECSscraper();
         FCPscraper fcp = new FCPscraper();
         UROscraper uro = new UROscraper();
         KermaTDIscraper kerma = new KermaTDIscraper();
         
+
         var fcptask = fcp.SearchResults(args[0]);
         var ecstask = ecs.SearchResults(args[0]);
         var urotask = uro.SearchResults(args[0]);
         var kermaTask = kerma.SearchResults(args[0]);
         
+
         var results = await Task.WhenAll(fcptask, ecstask, urotask,  kermaTask);
         
+
         var allListings = results.SelectMany(list => list).ToList();
         allListings.Sort((a, b) => a.Price.CompareTo(b.Price));
         
+
+
         var table = new Table();
         table.Border(TableBorder.Rounded);
         table.AddColumn("[bold yellow]Price[/]");
@@ -100,6 +115,8 @@ class Program
         }
 
         AnsiConsole.Write(table);
+        
+        await BrowserManager.Instance.CloseAsync();
     }
     
     

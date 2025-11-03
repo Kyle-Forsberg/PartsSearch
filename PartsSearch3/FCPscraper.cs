@@ -1,7 +1,6 @@
 using System.Data.Common;
 using HtmlAgilityPack;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+
 namespace PartsSearch3;
 
 public class FCPscraper
