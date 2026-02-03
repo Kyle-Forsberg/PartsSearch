@@ -11,7 +11,7 @@ public class Listing
     //moved these around to work better with the JS
     public Listing() { }
 
-    public Listing(string partnumber, string link, string brand, double price)
+    public Listing(string partnumber, string link, string? brand, double price)
     {
         this.Partnumber = partnumber;
         this.Link = link;

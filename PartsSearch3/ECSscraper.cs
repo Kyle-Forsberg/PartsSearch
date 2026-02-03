@@ -23,6 +23,7 @@ public class ECSscraper
             var resp = client.Send(req);
             resp.EnsureSuccessStatusCode();
             return resp?.Content?.ReadAsStringAsync().Result;
+
         }
         catch (Exception e)
         {
@@ -30,7 +31,7 @@ public class ECSscraper
             Console.WriteLine("Nothing found on ECS tuning");
         }
 
-        return null;
+        return await new Task<string>( ()=> {return "";});
     }
     
     public async Task<List<Listing>> SearchResults(string partNumber)
@@ -38,7 +39,7 @@ public class ECSscraper
         //makes the search in the site, and then returns links to each listing
         //hence it returning a list
         string link = "https://www.ecstuning.com/Search/SiteSearch/" + partNumber;
-        string html = await GetHtml(link);
+        string? html = await GetHtml(link);
         //Console.WriteLine(html);
         var doc = new HtmlDocument();
         if (html == null)

@@ -7,7 +7,7 @@ public class FCPscraper
 {
     private static readonly HttpClient client = new HttpClient();
     
-    public async Task<string> GetHtml(string url)
+    public async Task<string?> GetHtml(string url)
     {
         var req = new HttpRequestMessage(HttpMethod.Get, url);
         req.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
@@ -18,12 +18,14 @@ public class FCPscraper
             var resp = await client.SendAsync(req);
             resp.EnsureSuccessStatusCode();
             return await resp.Content.ReadAsStringAsync();
+			
         }
         catch (Exception e)
         {
+			Console.WriteLine(e);
             Console.WriteLine("Nothing found on FCP euro");
         }
-        return null;
+        return await new Task<string?>( ()=> {return null;});
     }
     
     
@@ -33,7 +35,7 @@ public class FCPscraper
         //hence it returning a list
 
         string link = "https://www.fcpeuro.com/Parts/?keywords=" + partNumber;   //base link for doing searches
-        string html = await GetHtml(link);
+        string? html = await GetHtml(link);
         if (html == null || html.Length == 0)   //check to make sure we found a usable link before we move on
         {
             return new List<Listing>();
