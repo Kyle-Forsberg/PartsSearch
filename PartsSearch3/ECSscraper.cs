@@ -31,7 +31,7 @@ public class ECSscraper
             Console.WriteLine("Nothing found on ECS tuning");
         }
 
-        return await new Task<string>( ()=> {return "";});
+        return "";
     }
     
     public async Task<List<Listing>> SearchResults(string partNumber)

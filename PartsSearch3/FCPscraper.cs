@@ -25,7 +25,7 @@ public class FCPscraper
 			Console.WriteLine(e);
             Console.WriteLine("Nothing found on FCP euro");
         }
-        return await new Task<string?>( ()=> {return null;});
+        return null;
     }
     
     
@@ -33,11 +33,11 @@ public class FCPscraper
     {
         //makes the search in the site, and then returns links to each listing
         //hence it returning a list
-
         string link = "https://www.fcpeuro.com/Parts/?keywords=" + partNumber;   //base link for doing searches
         string? html = await GetHtml(link);
         if (html == null || html.Length == 0)   //check to make sure we found a usable link before we move on
         {
+			Console.WriteLine("Reciveved a NULL LINK FOR FCP EURO\n");
             return new List<Listing>();
         }
                 //httpclient runs async so we need to await it
@@ -48,19 +48,31 @@ public class FCPscraper
         List<Listing>? resultsList = new List<Listing>();
         if (nodes.Count == 0)
         {
-            //Console.WriteLine("No results found on FCP euro :(");
+            Console.WriteLine("No results found on FCP euro :(");
             return new List<Listing>();
         }
         foreach (var node in nodes)
         {
-            string? href = node.GetAttributeValue("data-href", string.Empty);
+			var linkNode = node.SelectSingleNode(".//a[contains(@class, 'hit__name') and contains(@class, 'hit__name--stretched')]");
+			string? href = linkNode?.GetAttributeValue("href", string.Empty);
+			if(linkNode!=null){
+				 href = linkNode.GetAttributeValue("href",string.Empty);
+				 //Console.WriteLine("Grabbed HREF: " + href);
+			}
+			else { href=null;}
+
+			//Console.WriteLine("Iteration of node in FCP scraper");
             string? pricestr =  node.GetAttributeValue("data-price", string.Empty);
             string brand = node.GetAttributeValue("data-brand", string.Empty);
-            
+			//Console.WriteLine("DUMP OF FCP DATA:\nhref: "+href+"\tpricestr: "+pricestr+"\tbrand:"+brand);            
+
             // all this info is avalible right there, might aswell take it from here.
-            if (href != string.Empty)
+            if (href != string.Empty && pricestr!="")
             {
                 resultsList.Add(new Listing(partNumber, "https://www.fcpeuro.com" + href, brand, double.Parse(pricestr)));
+			}
+			else if(pricestr!=null && pricestr!=""){
+				resultsList.Add(new Listing(partNumber, "https://www.fcpeuro.com", brand, double.Parse(pricestr)));
             }
         }
 
